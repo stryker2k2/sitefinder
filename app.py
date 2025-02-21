@@ -11,14 +11,16 @@ previous = ['castsaos.net', 'http://app-myextracalert-7f.online', 'http://appmye
 found = []
 
 def request_site(site):
-    print(site)
+    # print(site)
     try:
         resp = requests.get(site)
         if resp.status_code == 200:
-            print("x", end="")
+            # print("x", end="")
             found.append(site)
+            return True
     except requests.exceptions.ConnectionError:
-        print(".", end="")
+        # print(".", end="")
+        return False
     else:
         raise RuntimeError
 
@@ -30,7 +32,9 @@ def find_site(sites):
             for y_item in alphanum:
                 subx = re.sub("#X", x_item, site)
                 subxy = re.sub("#Y", y_item, subx)
-                request_site(subxy)
+                result = request_site(subxy)
+                print("x", end="") if result else print(".", end="")
+
 
 if "__main__" in __name__:
     sites = [
@@ -39,7 +43,9 @@ if "__main__" in __name__:
         ]
     find_site(sites)
     if found:
-        print("Found:\n------")
+        print("\nFound:\n------\n")
         for item in found:
             print('>>  ' + item)
-    print("\nEnd\n")
+    else:
+        print("\nNo Site(s) Found\n")
+    print("End\n")
